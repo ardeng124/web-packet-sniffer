@@ -1,7 +1,6 @@
 package backendsrc;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +8,6 @@ import org.pcap4j.core.PcapAddress;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.Pcaps;
-import org.pcap4j.core.PcapNetworkInterface;
-import org.pcap4j.util.NifSelector;
 
 public class backendsrc 
 {  
@@ -38,11 +35,17 @@ public class backendsrc
     }
 
     public static void main(String[] args) {
-        List<PcapNetworkInterface> allDevs = getNetworkInterfacesWithIP();
+        CaptureEngine captureEngine = new CaptureEngine();
+        List<PcapNetworkInterface> allDevs = captureEngine.getNetworkInterfacesWithIP();
         for (PcapNetworkInterface netInt : allDevs) {
             System.out.println(netInt.getName() +" "+netInt.getAddresses());
         }
-        
+        try {
+            captureEngine.startCapture(allDevs.get(0));
+        } catch (PcapNativeException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         //PcapNetworkInterface device = getNetworkDevice();    
         //System.out.println("You chose: " + device);
     }
