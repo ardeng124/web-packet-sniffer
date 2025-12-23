@@ -3,50 +3,39 @@ package backendsrc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-import org.pcap4j.core.PcapAddress;
+import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
-import org.pcap4j.core.Pcaps;
 
 public class backendsrc 
-{  
-    static List<PcapNetworkInterface> getNetworkInterfacesWithIP() {
-        List<PcapNetworkInterface> allDevs = null;
-        try {
-            allDevs = Pcaps.findAllDevs();
-        } catch (PcapNativeException e) {
-            //throw new IOException(e.getMessage());
-        }
-
-        if (allDevs == null || allDevs.isEmpty()) {
-            //throw new IOException("No NIF to capture.");
-        }
-        List<PcapNetworkInterface> interfacesWithIp = new ArrayList<>();
-        for (PcapNetworkInterface netInterface : allDevs) {
-                for (PcapAddress inetAddress : netInterface.getAddresses()) {
-                    if (inetAddress != null) {
-                        interfacesWithIp.add(netInterface);
-                        break; 
-                    }
-                }
-            }
-        return interfacesWithIp;
-    }
-
+{ 
     public static void main(String[] args) {
         CaptureEngine captureEngine = new CaptureEngine();
+        Scanner scanner = new Scanner(System.in);
         List<PcapNetworkInterface> allDevs = captureEngine.getNetworkInterfacesWithIP();
+        int i = 0;
         for (PcapNetworkInterface netInt : allDevs) {
-            System.out.println(netInt.getName() +" "+netInt.getAddresses());
+            System.out.println(i+":   "+netInt.getName() +" "+netInt.getAddresses());
+            i = i+1;
         }
+        String line = scanner.nextLine();
+        int index = Integer.parseInt(line);
         try {
-            captureEngine.startCapture(allDevs.get(0));
+            captureEngine.startCapture(allDevs.get(index));
+            scanner.nextLine();
+            captureEngine.stopCapture();
+            scanner.close();
         } catch (PcapNativeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         //PcapNetworkInterface device = getNetworkDevice();    
         //System.out.println("You chose: " + device);
+        catch (NotOpenException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+        }
     }
 }

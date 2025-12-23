@@ -45,27 +45,44 @@ public class CaptureEngine {
     }
 
     public void startCapture(PcapNetworkInterface selectedInterface) throws PcapNativeException {
-       
-        // ensure not running
+        if (!running) {
+            captureHandle = selectedInterface.openLive(snapshotLength, PromiscuousMode.PROMISCUOUS, readTimeout);
+            running = true;
+            captureThread = new Thread(() -> {
+                PacketListener listener = new PacketListener() {
+                    @Override
+                    public void gotPacket(Packet packet) {
+                        // Override the default gotPacket() function and process packet
+                        System.out.println(captureHandle.getTimestamp());
+                        //System.out.println(packet);
+                    }
+                };
+                // int maxPackets = 300;
+                try {
+                    captureHandle.loop(-1, listener);
+                } catch (PcapNativeException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (NotOpenException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    //this is when the handle gets stopped
+                    e.printStackTrace();
+                } finally {
+                    running = false;
+                }
+            });
+            captureThread.start();
 
-        // create handle
-
-        // create thread
-
-        // thread:
-
-        // run capture loop using handle
-
-        // mark running
+        }
     }
 
-    public void stopCapture() {
-        // if running:
-
-        // close handle
-
-        // wait for thread
-
-        // clear state
+    public void stopCapture() throws NotOpenException {
+        if (running && captureHandle != null) {
+            captureHandle.breakLoop();
+            captureHandle.close();
+            running=false;
+        }
     }
 }
