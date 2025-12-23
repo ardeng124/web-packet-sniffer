@@ -44,7 +44,7 @@ public class CaptureEngine {
         return interfacesWithIp;
     }
 
-    public void startCapture(PcapNetworkInterface selectedInterface) throws PcapNativeException {
+    public void startCapture(PcapNetworkInterface selectedInterface, PacketConsumer consumer) throws PcapNativeException {
         if (!running) {
             captureHandle = selectedInterface.openLive(snapshotLength, PromiscuousMode.PROMISCUOUS, readTimeout);
             running = true;
@@ -52,8 +52,10 @@ public class CaptureEngine {
                 PacketListener listener = new PacketListener() {
                     @Override
                     public void gotPacket(Packet packet) {
-                        // Override the default gotPacket() function and process packet
-                        System.out.println(captureHandle.getTimestamp());
+
+                        //todo: PacketSummary newPacket = new PacketSummary(Packet.timestamp, "", Packet.sourceAddress, readTimeout, null, snapshotLength, readTimeout); -- Create a packet summary based off captured packet
+                        //todo: consumer.consumePacket(newPacket); -- pass to consumer
+                        
                         //System.out.println(packet);
                     }
                 };
