@@ -1,10 +1,9 @@
 package backendsrc;
 
 import java.net.InetAddress;
-import java.time.LocalDateTime;
-
+import java.sql.Timestamp;
 public final class PacketSummary {
-    public final LocalDateTime timestamp;
+    public final Timestamp timestamp;
     public final String protocol;
     public final InetAddress sourceAddress;
     public final int port;
@@ -12,7 +11,7 @@ public final class PacketSummary {
     public final int packetLength;
     public final int destPort;
 
-    public PacketSummary(LocalDateTime timestamp, String protocol, InetAddress sourceAddress, int port, InetAddress destinationAddress, int packetLength, int destPort) {
+    public PacketSummary(Timestamp timestamp, String protocol, InetAddress sourceAddress, int port, InetAddress destinationAddress, int packetLength, int destPort) {
         this.timestamp = timestamp;
         this.protocol = protocol;
         this.sourceAddress = sourceAddress;
@@ -21,9 +20,9 @@ public final class PacketSummary {
         this.packetLength = packetLength;
         this.destPort = destPort;
     }
-    
+ 
     public String toString() {
-        String ret = (this.timestamp+"  protocol"+this.protocol+  "   src:"+ this.sourceAddress+ "   port:"+this.port+"   dest:"+this.destinationAddress+"   destPort:"+this.destPort);
+        String ret = (this.timestamp+"  protocol:"+this.protocol+  "   src:"+ this.sourceAddress+ "   port:"+this.port+"   dest:"+this.destinationAddress+"   destPort:"+this.destPort);
         return ret;
     }
 }
