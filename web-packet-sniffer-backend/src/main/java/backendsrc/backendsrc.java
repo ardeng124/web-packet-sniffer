@@ -1,15 +1,10 @@
 package backendsrc;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
-
-import org.pcap4j.core.NotOpenException;
-import org.pcap4j.core.PcapNativeException;
-import org.pcap4j.core.PcapNetworkInterface;
-
 import backendsrc.domain.PacketSummary;
 import backendsrc.service.CaptureService;
+import backendsrc.service.NetworkInterfaceInfo;
 
 public class backendsrc 
 { 
@@ -17,10 +12,8 @@ public class backendsrc
         CaptureService mainService = new CaptureService(100);
 
         Scanner scanner = new Scanner(System.in);
-        List<PcapNetworkInterface> allDevs = mainService.getNetworkInterfacesWithIP();
-        for (PcapNetworkInterface netInt : allDevs) {
-            System.out.println(netInt.getName() +" "+netInt.getAddresses());
-        }
+        List<NetworkInterfaceInfo> allDevs = mainService.getNetworkInterfaces();
+        allDevs.forEach((i) -> System.out.println(i.toString()));
         String line = scanner.nextLine();
 
         mainService.startCapture(line);
@@ -33,6 +26,7 @@ public class backendsrc
 
         scanner.nextLine();
         mainService.stopCapture();
+        scanner.close();
     
     }
 }

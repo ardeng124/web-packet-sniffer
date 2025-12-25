@@ -22,15 +22,18 @@ public class CaptureService {
         defaultBufferSize = bufferSize;
     }
 
-    public List<PcapNetworkInterface> getNetworkInterfacesWithIP() {
+    private List<PcapNetworkInterface> getNetworkInterfacesPcap() {
         List<PcapNetworkInterface> allDevs = null;
         try {
             allDevs = Pcaps.findAllDevs();
         } catch (PcapNativeException e) {
+            //TODO: Add exception handling
             // throw new IOException(e.getMessage()); todo: fix
         }
 
         if (allDevs == null || allDevs.isEmpty()) {
+            //TODO: Add exception handling
+
             // throw new IOException("No NIF to capture."); todo: fix
         }
         List<PcapNetworkInterface> interfacesWithIp = new ArrayList<>();
@@ -43,6 +46,41 @@ public class CaptureService {
             }
         }
         return interfacesWithIp;
+    }
+
+    public List<NetworkInterfaceInfo> getNetworkInterfaces() {
+        List<PcapNetworkInterface> allDevs = null;
+        try {
+            allDevs = Pcaps.findAllDevs();
+        } catch (PcapNativeException e) {
+            //TODO: Add exception handling
+            // throw new IOException(e.getMessage());
+        }
+
+        if (allDevs == null || allDevs.isEmpty()) {
+            //TODO: Add exception handling
+            //throw new IOException("No NIF to capture.");
+        }
+        List<PcapNetworkInterface> interfacesWithIp = new ArrayList<>();
+        for (PcapNetworkInterface netInterface : allDevs) {
+            for (PcapAddress inetAddress : netInterface.getAddresses()) {
+                if (inetAddress != null) {
+                    interfacesWithIp.add(netInterface);
+                    break;
+                }
+            }
+        }
+        List<NetworkInterfaceInfo> interfaceSummary = new ArrayList<>();
+        for (PcapNetworkInterface netInterface : interfacesWithIp) {
+            List<String> addresses = new ArrayList<>();
+            for (PcapAddress inetAddress : netInterface.getAddresses()) {
+                addresses.add(inetAddress.toString());
+            }
+            NetworkInterfaceInfo netInt = new NetworkInterfaceInfo(netInterface.getName(), netInterface.getDescription(), addresses);
+            interfaceSummary.add(netInt);
+        }
+ 
+        return interfaceSummary;
     }
 
     private PcapNetworkInterface resolve (String interfaceName) {
