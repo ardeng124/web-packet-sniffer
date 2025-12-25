@@ -1,8 +1,10 @@
-package backendsrc;
+package backendsrc.consumer;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+
+import backendsrc.domain.PacketSummary;
 
 public class PacketBuffer implements PacketConsumer {
     private final ArrayDeque<PacketSummary> packetBuffer;
@@ -29,5 +31,4 @@ public class PacketBuffer implements PacketConsumer {
             packetBuffer.addLast(inPacket);
         }
     }
-    
 }

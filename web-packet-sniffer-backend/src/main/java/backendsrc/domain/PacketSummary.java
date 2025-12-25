@@ -1,4 +1,4 @@
-package backendsrc;
+package backendsrc.domain;
 
 import java.net.InetAddress;
 import java.sql.Timestamp;

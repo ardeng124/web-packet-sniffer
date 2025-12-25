@@ -1,4 +1,4 @@
-package backendsrc;
+package backendsrc.engine;
 
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
@@ -9,6 +9,10 @@ import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.packet.IpV4Packet.IpV4Header;
 import org.pcap4j.packet.TcpPacket.TcpHeader;
 import org.pcap4j.packet.UdpPacket.UdpHeader;
+
+import backendsrc.consumer.PacketConsumer;
+import backendsrc.domain.PacketSummary;
+
 import org.pcap4j.packet.*;
 
 import java.net.Inet4Address;
@@ -23,8 +27,6 @@ public class CaptureEngine {
     public Thread captureThread;
     private volatile Boolean running = false;
 
-   
-    
     public PacketSummary extractPacketSummary(Packet packet, PcapHandle captureHandle) {
         Timestamp timestamp = captureHandle.getTimestamp();
         Packet ipPacket = null;

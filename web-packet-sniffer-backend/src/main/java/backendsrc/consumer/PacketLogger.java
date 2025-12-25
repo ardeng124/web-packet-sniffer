@@ -1,4 +1,6 @@
-package backendsrc;
+package backendsrc.consumer;
+
+import backendsrc.domain.PacketSummary;
 
 public class PacketLogger implements PacketConsumer{
 
