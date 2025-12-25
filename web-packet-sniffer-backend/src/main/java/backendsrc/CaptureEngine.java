@@ -1,16 +1,11 @@
 package backendsrc;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
-import org.pcap4j.core.PcapAddress;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
-import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.IpV4Packet.IpV4Header;
 import org.pcap4j.packet.TcpPacket.TcpHeader;
 import org.pcap4j.packet.UdpPacket.UdpHeader;
@@ -28,28 +23,7 @@ public class CaptureEngine {
     public Thread captureThread;
     private volatile Boolean running = false;
 
-    public List<PcapNetworkInterface> getNetworkInterfacesWithIP() {
-        List<PcapNetworkInterface> allDevs = null;
-        try {
-            allDevs = Pcaps.findAllDevs();
-        } catch (PcapNativeException e) {
-            // throw new IOException(e.getMessage()); todo: fix
-        }
-
-        if (allDevs == null || allDevs.isEmpty()) {
-            // throw new IOException("No NIF to capture."); todo: fix
-        }
-        List<PcapNetworkInterface> interfacesWithIp = new ArrayList<>();
-        for (PcapNetworkInterface netInterface : allDevs) {
-            for (PcapAddress inetAddress : netInterface.getAddresses()) {
-                if (inetAddress != null) {
-                    interfacesWithIp.add(netInterface);
-                    break;
-                }
-            }
-        }
-        return interfacesWithIp;
-    }
+   
     
     public PacketSummary extractPacketSummary(Packet packet, PcapHandle captureHandle) {
         Timestamp timestamp = captureHandle.getTimestamp();
