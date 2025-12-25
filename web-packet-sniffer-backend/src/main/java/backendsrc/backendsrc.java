@@ -1,7 +1,6 @@
 package backendsrc;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,7 +13,7 @@ public class backendsrc
     public static void main(String[] args) {
         CaptureEngine captureEngine = new CaptureEngine();
         Scanner scanner = new Scanner(System.in);
-        PacketBuffer consumer = new PacketBuffer();
+        CaptureSession session = new CaptureSession();
         List<PcapNetworkInterface> allDevs = captureEngine.getNetworkInterfacesWithIP();
         int i = 0;
         for (PcapNetworkInterface netInt : allDevs) {
@@ -24,14 +23,14 @@ public class backendsrc
         String line = scanner.nextLine();
         int index = Integer.parseInt(line);
         try {
-            captureEngine.startCapture(allDevs.get(index),consumer);
+            captureEngine.startCapture(allDevs.get(index),session.consumer);
            
         } catch (PcapNativeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         scanner.nextLine();
-        List<PacketSummary> packets = consumer.getSnapshot();
+        List<PacketSummary> packets = session.getBufferSnapshot();
         packets.forEach((p)-> {
             System.out.println(p);
         });
@@ -39,6 +38,7 @@ public class backendsrc
         try {
             scanner.nextLine();
             captureEngine.stopCapture();
+            session.stopSession();
             scanner.close();
         } catch (NotOpenException e) {
             // TODO Auto-generated catch block

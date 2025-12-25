@@ -12,16 +12,12 @@ import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
 import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.IpV4Packet.IpV4Header;
-import org.pcap4j.packet.Packet.Header;
 import org.pcap4j.packet.TcpPacket.TcpHeader;
 import org.pcap4j.packet.UdpPacket.UdpHeader;
-import org.pcap4j.util.ByteArrays;
-import org.pcap4j.packet.IpV6Packet.IpV6Header;
 import org.pcap4j.packet.*;
 
 import java.net.Inet4Address;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 
 public class CaptureEngine {
@@ -30,7 +26,7 @@ public class CaptureEngine {
     private int readTimeout = 50; // milliseconds
     private PcapHandle captureHandle;
     public Thread captureThread;
-    volatile Boolean running = false;
+    private volatile Boolean running = false;
 
     public List<PcapNetworkInterface> getNetworkInterfacesWithIP() {
         List<PcapNetworkInterface> allDevs = null;
