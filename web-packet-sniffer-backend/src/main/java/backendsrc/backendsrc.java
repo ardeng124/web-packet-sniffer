@@ -23,6 +23,7 @@ public class backendsrc
         String line = scanner.nextLine();
         int index = Integer.parseInt(line);
         try {
+            session.beginSession();
             captureEngine.startCapture(allDevs.get(index),session.consumer);
            
         } catch (PcapNativeException e) {

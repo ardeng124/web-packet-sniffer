@@ -5,21 +5,32 @@ import java.util.UUID;
 import java.time.Instant;
 
 public class CaptureSession {
-    UUID sessionID;
-    CaptureState state;
-    PacketBuffer consumer;
-    Instant startTime;
-    Instant stopTime;
+    public UUID sessionID;
+    public CaptureState state;
+    public PacketBuffer consumer;
+    public Instant startTime;
+    public Instant stopTime;
+    public int bufferSize;
+    
     public CaptureSession() {
         sessionID = UUID.randomUUID();
         state = CaptureState.NEW;
         consumer = new PacketBuffer();
     }
 
+    public CaptureSession(int maxBufferSize) {
+        sessionID = UUID.randomUUID();
+        state = CaptureState.NEW;
+        consumer = new PacketBuffer(maxBufferSize);
+        bufferSize = maxBufferSize;
+    }
+
     public synchronized void beginSession() {
         if (state != CaptureState.NEW) throw new IllegalStateException("Session state invalid");
+        state = CaptureState.RUNNING;
         startTime = Instant.now();
     }
+
     public synchronized void stopSession() {
         if (state != CaptureState.RUNNING) throw new IllegalStateException("Session state invalid");
         state = CaptureState.STOPPED;

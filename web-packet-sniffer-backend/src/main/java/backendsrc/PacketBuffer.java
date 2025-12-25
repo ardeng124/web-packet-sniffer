@@ -8,10 +8,13 @@ public class PacketBuffer implements PacketConsumer {
     private final ArrayDeque<PacketSummary> packetBuffer;
     int maxBufferSize = 1000;
     
+    public PacketBuffer(int bufferSize) {
+        packetBuffer = new ArrayDeque<>();
+        maxBufferSize = bufferSize;
+    }
     public PacketBuffer() {
         packetBuffer = new ArrayDeque<>();
     }
-
     public List<PacketSummary> getSnapshot(){
         synchronized(packetBuffer){
             return new ArrayList<>(packetBuffer); 
@@ -20,7 +23,7 @@ public class PacketBuffer implements PacketConsumer {
     public void consumePacket(PacketSummary inPacket) {
         synchronized (packetBuffer) {
 
-            while (packetBuffer.size() > maxBufferSize) {
+            while (packetBuffer.size() >= maxBufferSize) {
                 packetBuffer.removeFirst();
             }
             packetBuffer.addLast(inPacket);
