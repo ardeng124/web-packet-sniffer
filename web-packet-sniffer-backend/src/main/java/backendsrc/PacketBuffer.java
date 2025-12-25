@@ -20,7 +20,7 @@ public class PacketBuffer implements PacketConsumer {
     public void consumePacket(PacketSummary inPacket) {
         synchronized (packetBuffer) {
 
-            if (packetBuffer.size() > maxBufferSize) {
+            while (packetBuffer.size() > maxBufferSize) {
                 packetBuffer.removeFirst();
             }
             packetBuffer.addLast(inPacket);

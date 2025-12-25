@@ -14,7 +14,7 @@ public class backendsrc
     public static void main(String[] args) {
         CaptureEngine captureEngine = new CaptureEngine();
         Scanner scanner = new Scanner(System.in);
-        PacketConsumer consumer = new PacketLogger();
+        PacketBuffer consumer = new PacketBuffer();
         List<PcapNetworkInterface> allDevs = captureEngine.getNetworkInterfacesWithIP();
         int i = 0;
         for (PcapNetworkInterface netInt : allDevs) {
@@ -25,18 +25,25 @@ public class backendsrc
         int index = Integer.parseInt(line);
         try {
             captureEngine.startCapture(allDevs.get(index),consumer);
-            scanner.nextLine();
-            captureEngine.stopCapture();
-            scanner.close();
+           
         } catch (PcapNativeException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        //PcapNetworkInterface device = getNetworkDevice();    
-        //System.out.println("You chose: " + device);
-        catch (NotOpenException e) {
+        scanner.nextLine();
+        List<PacketSummary> packets = consumer.getSnapshot();
+        packets.forEach((p)-> {
+            System.out.println(p);
+        });
+
+        try {
+            scanner.nextLine();
+            captureEngine.stopCapture();
+            scanner.close();
+        } catch (NotOpenException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
     }
 }

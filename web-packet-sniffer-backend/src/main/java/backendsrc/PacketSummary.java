@@ -22,7 +22,7 @@ public final class PacketSummary {
     }
  
     public String toString() {
-        String ret = (this.timestamp+"  protocol:"+this.protocol+  "   src:"+ this.sourceAddress+ "   port:"+this.port+"   dest:"+this.destinationAddress+"   destPort:"+this.destPort);
+        String ret = (this.timestamp+"   protocol:"+this.protocol+  "   src:"+ this.sourceAddress+ "   port:"+this.port+"   dest:"+this.destinationAddress+"   destPort:"+this.destPort);
         return ret;
     }
 }

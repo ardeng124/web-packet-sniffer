@@ -128,7 +128,7 @@ public class CaptureEngine {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     //this is when the handle gets stopped
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 } finally {
                     running = false;
                 }
