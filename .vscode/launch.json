@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-backendsrc<web-packet-sniffer-backend>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "backendsrc.backendsrc",
+            "projectName": "web-packet-sniffer-backend",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-WebPacketSnifferBackendApplication<web-packet-sniffer-backend>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "backendsrc.api.WebPacketSnifferBackendApplication",
+            "projectName": "web-packet-sniffer-backend",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
