@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import backendsrc.service.exception.CaptureSessionStateInvalidException;
 import backendsrc.service.exception.InterfaceNotFoundException;
 
 @RestControllerAdvice
@@ -15,5 +16,10 @@ public class ApiErrorHandler {
             return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(CaptureSessionStateInvalidException.class)
+    public ResponseEntity<ApiErrorResponse> handleCaptureAlreadyRunning(CaptureSessionStateInvalidException ex) {
+            ApiErrorResponse errorResponse = new ApiErrorResponse(HttpStatus.CONFLICT.value(),"Conflict", ex.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
     
 }

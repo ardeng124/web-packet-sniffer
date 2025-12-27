@@ -14,7 +14,11 @@ import backendsrc.domain.CaptureSession;
 import backendsrc.domain.CaptureState;
 import backendsrc.domain.PacketSummary;
 import backendsrc.engine.CaptureEngine;
+import backendsrc.service.exception.CaptureSessionStateInvalidException;
+import backendsrc.service.exception.CaptureEngineException;
+import backendsrc.service.exception.CaptureSessionStateInvalidException;
 import backendsrc.service.exception.InterfaceNotFoundException;
+import backendsrc.service.exception.NoActiveCaptureException;
 
 public class CaptureService {
     private CaptureSession currentSession;
@@ -23,6 +27,8 @@ public class CaptureService {
 
     public CaptureService(int bufferSize) {
         defaultBufferSize = bufferSize;
+        engine = new CaptureEngine();
+
     }
 
     private List<PcapNetworkInterface> getNetworkInterfacesPcap() {
@@ -117,27 +123,31 @@ public class CaptureService {
         }
     }
 
-    public void startCapture(String interfaceName) {
-        currentSession = new CaptureSession(defaultBufferSize);
-        engine = new CaptureEngine();
+    public synchronized void startCapture(String interfaceName) {
+        if (currentSession != null
+                && currentSession.state == CaptureState.RUNNING) {
+            throw new CaptureSessionStateInvalidException("Capture session already running");
+        }        currentSession = new CaptureSession(defaultBufferSize);
 
         PcapNetworkInterface iface = resolve(interfaceName);
         currentSession.beginSession();
         try {
             engine.startCapture(iface, currentSession.consumer);
         } catch (PcapNativeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new CaptureEngineException("Failed to start capture", e);
         }
     }
 
-    public void stopCapture() {
+    public synchronized void stopCapture() {
+        if (currentSession == null
+                || currentSession.state != CaptureState.RUNNING) {
+            throw new CaptureSessionStateInvalidException("Capture session not running or not initialised");
+        }  
         currentSession.stopSession();
         try {
             engine.stopCapture();
         } catch (NotOpenException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        throw new CaptureEngineException("Failed to stop capture", e);
         }
     }
 
