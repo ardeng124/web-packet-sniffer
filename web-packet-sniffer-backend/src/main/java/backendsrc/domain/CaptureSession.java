@@ -46,6 +46,10 @@ public class CaptureSession {
     public boolean isRunning() {
         return state == CaptureState.RUNNING;
     }
+
+    public void clearPackets() {
+        consumer.clear();
+    }
 }
 
 

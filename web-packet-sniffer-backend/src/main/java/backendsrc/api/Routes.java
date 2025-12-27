@@ -1,6 +1,8 @@
 package backendsrc.api;
 
 import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
@@ -15,10 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class Routes {
     CaptureService service = new CaptureService(1000);
-    @GetMapping("/api/hello")
-    public String hello() {
-        return "Hello from Spring Boot!";
-    }
 
     @GetMapping(value = "/api/interfaces", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<NetworkInterfaceInfo> interfaces() {
@@ -34,6 +32,11 @@ public class Routes {
     @GetMapping(value = "/api/packets", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PacketSummary> getPacketSnapshot() {
         return service.getPacketSnapshot();
+    }
+    
+    @DeleteMapping("/api/packets")
+    public void clearPackets() {
+        service.clearPackets();
     }
 
    @PostMapping(value = "/api/capture/start", consumes = "text/plain")

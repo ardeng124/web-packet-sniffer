@@ -176,7 +176,12 @@ public class CaptureService {
         }
     }
 
-    public List<PacketSummary> getPacketSnapshot(){
+    public synchronized void clearPackets() {
+        if (currentSession == null) throw new CaptureSessionStateInvalidException("Capture session not running or not initialised"); 
+        currentSession.clearPackets();
+    }
+
+    public synchronized List<PacketSummary> getPacketSnapshot(){
         if (currentSession == null) return new ArrayList<PacketSummary>();
         return currentSession.getBufferSnapshot();
     }

@@ -22,6 +22,9 @@ public class PacketBuffer implements PacketConsumer {
             return new ArrayList<>(packetBuffer); 
         }
     }
+    public void clear() {
+        packetBuffer.clear();
+    }
     public void consumePacket(PacketSummary inPacket) {
         synchronized (packetBuffer) {
 
