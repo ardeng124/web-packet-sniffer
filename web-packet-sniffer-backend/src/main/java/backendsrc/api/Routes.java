@@ -4,6 +4,8 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
+
+import backendsrc.domain.PacketSummary;
 import backendsrc.service.CaptureService;
 import backendsrc.service.NetworkInterfaceInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +26,14 @@ public class Routes {
         return interfaces;
     }
 
-    @GetMapping(value = "/api/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/api/capture/status", produces = MediaType.APPLICATION_JSON_VALUE)
     public CaptureStatusResponse status() {
         return service.currentStatus();
+    }
+
+    @GetMapping(value = "/api/packets", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PacketSummary> getPacketSnapshot() {
+        return service.getPacketSnapshot();
     }
 
    @PostMapping(value = "/api/capture/start", consumes = "text/plain")

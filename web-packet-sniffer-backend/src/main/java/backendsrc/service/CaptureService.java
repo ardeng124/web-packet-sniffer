@@ -177,6 +177,7 @@ public class CaptureService {
     }
 
     public List<PacketSummary> getPacketSnapshot(){
+        if (currentSession == null) return new ArrayList<PacketSummary>();
         return currentSession.getBufferSnapshot();
     }
 
