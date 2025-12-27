@@ -14,6 +14,7 @@ import backendsrc.domain.CaptureSession;
 import backendsrc.domain.CaptureState;
 import backendsrc.domain.PacketSummary;
 import backendsrc.engine.CaptureEngine;
+import backendsrc.service.exception.InterfaceNotFoundException;
 
 public class CaptureService {
     private CaptureSession currentSession;
@@ -112,9 +113,7 @@ public class CaptureService {
         if (foundInterface != null) {
             return foundInterface;
         } else {
-            return null;
-            //TODO: Fix handling interface not found.
-            //throw an exception or something
+            throw new InterfaceNotFoundException(interfaceName);
         }
     }
 
