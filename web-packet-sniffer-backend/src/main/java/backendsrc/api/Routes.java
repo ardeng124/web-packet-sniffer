@@ -24,6 +24,11 @@ public class Routes {
         return interfaces;
     }
 
+    @GetMapping(value = "/api/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CaptureStatusResponse status() {
+        return service.currentStatus();
+    }
+
    @PostMapping(value = "/api/capture/start", consumes = "text/plain")
     public CaptureStatusResponse startCapture(@RequestBody String body) {
         String interfaceName = body;

@@ -10,6 +10,7 @@ import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.Pcaps;
 
+import backendsrc.api.CaptureStatusResponse;
 import backendsrc.domain.CaptureSession;
 import backendsrc.domain.CaptureState;
 import backendsrc.domain.PacketSummary;
@@ -63,6 +64,30 @@ public class CaptureService {
 
     public CaptureState getSessionState(){
         return currentSession.state;
+    }
+
+    public CaptureStatusResponse currentStatus() {
+        if (currentSession == null) {
+            return new CaptureStatusResponse(null, null, "Session not initialised");
+        } else {
+            String statusMessage;
+            
+            switch (currentSession.state) {
+                case RUNNING:
+                    statusMessage = "running";
+                    break;
+                case STOPPED:
+                    statusMessage = "session stopped";
+                    break;
+                case NEW:
+                    statusMessage = "starting";
+                    break;
+                default:
+                    statusMessage = "unknown";
+            }
+            
+            return new CaptureStatusResponse(getSessionID(), getSessionState(), statusMessage);
+        }
     }
 
     public List<NetworkInterfaceInfo> getNetworkInterfaces() {
