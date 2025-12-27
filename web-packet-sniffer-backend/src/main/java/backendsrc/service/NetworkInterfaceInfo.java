@@ -3,10 +3,10 @@ package backendsrc.service;
 import java.util.List;
 
 public class NetworkInterfaceInfo {
-    String name;
-    String description;
-    List<String> addresses;
-    String macAddress;
+    public String name;
+    public String description;
+    public List<String> addresses;
+    public String macAddress;
 
     public NetworkInterfaceInfo(String nameIn, String descIn, List<String> addressesIn, String macIn ){
         name = nameIn;

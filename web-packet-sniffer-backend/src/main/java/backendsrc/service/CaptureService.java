@@ -2,6 +2,7 @@ package backendsrc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PcapAddress;
@@ -10,6 +11,7 @@ import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.Pcaps;
 
 import backendsrc.domain.CaptureSession;
+import backendsrc.domain.CaptureState;
 import backendsrc.domain.PacketSummary;
 import backendsrc.engine.CaptureEngine;
 
@@ -46,6 +48,14 @@ public class CaptureService {
             }
         }
         return interfacesWithIp;
+    }
+
+    public UUID getSessionID(){
+        return currentSession.sessionID;
+    }
+
+    public CaptureState getSessionState(){
+        return currentSession.state;
     }
 
     public List<NetworkInterfaceInfo> getNetworkInterfaces() {
