@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
 import backendsrc.service.CaptureService;
 import backendsrc.service.NetworkInterfaceInfo;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 public class Routes {
@@ -21,11 +24,19 @@ public class Routes {
         return interfaces;
     }
 
-    @GetMapping(value = "/api/capture/start", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CaptureStatusResponse startCapture(String interfaceName) {
+   @PostMapping(value = "/api/capture/start", consumes = "text/plain")
+    public CaptureStatusResponse startCapture(@RequestBody String body) {
+        String interfaceName = body;
         service.startCapture(interfaceName);
-        CaptureStatusResponse res = new CaptureStatusResponse(service.getSessionID(),service.getSessionState());
+        CaptureStatusResponse res = new CaptureStatusResponse(service.getSessionID(),service.getSessionState(), "Capture started successfully");
         return res;
-    } 
+    }
+
+    @PostMapping(value = "/api/capture/stop")
+    public CaptureStatusResponse stopCapture() {
+        service.stopCapture();
+        CaptureStatusResponse res = new CaptureStatusResponse(service.getSessionID(),service.getSessionState(), "Capture stopped successfully");
+        return res;
+    }
 
 }
