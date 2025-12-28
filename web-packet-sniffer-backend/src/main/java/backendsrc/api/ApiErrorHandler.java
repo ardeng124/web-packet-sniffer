@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import backendsrc.service.exception.CaptureSessionStateInvalidException;
+import backendsrc.service.exception.InterfaceEnumerationFailedException;
 import backendsrc.service.exception.CaptureOperationFailedException;
 import backendsrc.service.exception.InterfaceNotFoundException;
 
@@ -26,6 +27,12 @@ public class ApiErrorHandler {
     @ExceptionHandler(CaptureOperationFailedException.class)
     public ResponseEntity<ApiErrorResponse> handleCaptureEngineError(CaptureOperationFailedException ex) {
             ApiErrorResponse errorResponse = new ApiErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Capture Error", ex.getMessage());
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InterfaceEnumerationFailedException.class)
+    public ResponseEntity<ApiErrorResponse> handleInterfaceEnumerationFailure(InterfaceEnumerationFailedException ex) {
+            ApiErrorResponse errorResponse = new ApiErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Unable to list interfaces", ex.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     

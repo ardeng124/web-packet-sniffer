@@ -2,10 +2,12 @@ package backendsrc.engine;
 
 import org.pcap4j.core.NotOpenException;
 import org.pcap4j.core.PacketListener;
+import org.pcap4j.core.PcapAddress;
 import org.pcap4j.core.PcapHandle;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.PcapNetworkInterface.PromiscuousMode;
+import org.pcap4j.core.Pcaps;
 import org.pcap4j.packet.IpV4Packet.IpV4Header;
 import org.pcap4j.packet.TcpPacket.TcpHeader;
 import org.pcap4j.packet.UdpPacket.UdpHeader;
@@ -13,11 +15,14 @@ import org.pcap4j.packet.UdpPacket.UdpHeader;
 import backendsrc.consumer.PacketConsumer;
 import backendsrc.domain.PacketSummary;
 import backendsrc.engine.exception.CaptureEngineException;
+import backendsrc.service.NetworkInterfaceInfo;
 
 import org.pcap4j.packet.*;
 
 import java.net.Inet4Address;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CaptureEngine {
@@ -75,6 +80,39 @@ public class CaptureEngine {
             packet.length(), 
             dstPort
         );
+    }
+
+    public List<NetworkInterfaceInfo> getNetworkInterfaces() throws CaptureEngineException{
+        List<PcapNetworkInterface> allDevs = null;
+        try {
+            allDevs = Pcaps.findAllDevs();
+        } catch (PcapNativeException e) {
+            throw new CaptureEngineException(e.getMessage(), e);
+        }
+
+        if (allDevs == null || allDevs.isEmpty()) {
+            throw new CaptureEngineException("No interfaces available");
+        }
+        List<PcapNetworkInterface> interfacesWithIp = new ArrayList<>();
+        for (PcapNetworkInterface netInterface : allDevs) {
+            for (PcapAddress inetAddress : netInterface.getAddresses()) {
+                if (inetAddress != null) {
+                    interfacesWithIp.add(netInterface);
+                    break;
+                }
+            }
+        }
+        List<NetworkInterfaceInfo> interfaceSummary = new ArrayList<>();
+        for (PcapNetworkInterface netInterface : interfacesWithIp) {
+            List<String> addresses = new ArrayList<>();
+            for (PcapAddress inetAddress : netInterface.getAddresses()) {
+                addresses.add(inetAddress.toString());
+            }
+            NetworkInterfaceInfo netInt = new NetworkInterfaceInfo(netInterface.getName(), netInterface.getDescription(), addresses);
+            interfaceSummary.add(netInt);
+        }
+ 
+        return interfaceSummary;
     }
 
     public void startCapture(PcapNetworkInterface selectedInterface, PacketConsumer consumer) throws CaptureEngineException {

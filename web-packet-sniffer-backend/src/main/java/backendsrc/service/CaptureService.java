@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.pcap4j.core.NotOpenException;
-import org.pcap4j.core.PcapAddress;
 import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.core.Pcaps;
@@ -18,6 +16,7 @@ import backendsrc.engine.CaptureEngine;
 import backendsrc.engine.exception.CaptureEngineException;
 import backendsrc.service.exception.CaptureOperationFailedException;
 import backendsrc.service.exception.CaptureSessionStateInvalidException;
+import backendsrc.service.exception.InterfaceEnumerationFailedException;
 import backendsrc.service.exception.InterfaceNotFoundException;
 
 public class CaptureService {
@@ -30,33 +29,7 @@ public class CaptureService {
         engine = new CaptureEngine();
 
     }
-
-    private List<PcapNetworkInterface> getNetworkInterfacesPcap() {
-        List<PcapNetworkInterface> allDevs = null;
-        try {
-            allDevs = Pcaps.findAllDevs();
-        } catch (PcapNativeException e) {
-            //TODO: Add exception handling
-            // throw new IOException(e.getMessage()); todo: fix
-        }
-
-        if (allDevs == null || allDevs.isEmpty()) {
-            //TODO: Add exception handling
-
-            // throw new IOException("No NIF to capture."); todo: fix
-        }
-        List<PcapNetworkInterface> interfacesWithIp = new ArrayList<>();
-        for (PcapNetworkInterface netInterface : allDevs) {
-            for (PcapAddress inetAddress : netInterface.getAddresses()) {
-                if (inetAddress != null) {
-                    interfacesWithIp.add(netInterface);
-                    break;
-                }
-            }
-        }
-        return interfacesWithIp;
-    }
-
+ 
     public UUID getSessionID(){
         return currentSession.sessionID;
     }
@@ -90,37 +63,12 @@ public class CaptureService {
     }
 
     public List<NetworkInterfaceInfo> getNetworkInterfaces() {
-        List<PcapNetworkInterface> allDevs = null;
-        try {
-            allDevs = Pcaps.findAllDevs();
-        } catch (PcapNativeException e) {
-            //TODO: Add exception handling
-            // throw new IOException(e.getMessage());
-        }
-
-        if (allDevs == null || allDevs.isEmpty()) {
-            //TODO: Add exception handling
-            //throw new IOException("No NIF to capture.");
-        }
-        List<PcapNetworkInterface> interfacesWithIp = new ArrayList<>();
-        for (PcapNetworkInterface netInterface : allDevs) {
-            for (PcapAddress inetAddress : netInterface.getAddresses()) {
-                if (inetAddress != null) {
-                    interfacesWithIp.add(netInterface);
-                    break;
-                }
-            }
-        }
         List<NetworkInterfaceInfo> interfaceSummary = new ArrayList<>();
-        for (PcapNetworkInterface netInterface : interfacesWithIp) {
-            List<String> addresses = new ArrayList<>();
-            for (PcapAddress inetAddress : netInterface.getAddresses()) {
-                addresses.add(inetAddress.toString());
-            }
-            NetworkInterfaceInfo netInt = new NetworkInterfaceInfo(netInterface.getName(), netInterface.getDescription(), addresses);
-            interfaceSummary.add(netInt);
+        try {
+        interfaceSummary = engine.getNetworkInterfaces();
+        } catch (CaptureEngineException e) {
+            throw new InterfaceEnumerationFailedException("No interfaces found / Unable to enumerate interfaces");
         }
- 
         return interfaceSummary;
     }
 
