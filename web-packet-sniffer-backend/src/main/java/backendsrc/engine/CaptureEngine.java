@@ -12,6 +12,7 @@ import org.pcap4j.packet.UdpPacket.UdpHeader;
 
 import backendsrc.consumer.PacketConsumer;
 import backendsrc.domain.PacketSummary;
+import backendsrc.engine.exception.CaptureEngineException;
 
 import org.pcap4j.packet.*;
 
@@ -76,9 +77,13 @@ public class CaptureEngine {
         );
     }
 
-    public void startCapture(PcapNetworkInterface selectedInterface, PacketConsumer consumer) throws PcapNativeException {
+    public void startCapture(PcapNetworkInterface selectedInterface, PacketConsumer consumer) throws CaptureEngineException {
         if (!running) {
-            captureHandle = selectedInterface.openLive(snapshotLength, PromiscuousMode.PROMISCUOUS, readTimeout);
+            try {
+                captureHandle = selectedInterface.openLive(snapshotLength, PromiscuousMode.PROMISCUOUS, readTimeout);
+            } catch (PcapNativeException e) {
+                throw new CaptureEngineException(e.getMessage(), e);
+            }
             running = true;
 
             captureThread = new Thread(() -> {
@@ -92,14 +97,11 @@ public class CaptureEngine {
                 // int maxPackets = 300;
                 try {
                     captureHandle.loop(-1, listener);
-                } catch (PcapNativeException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (NotOpenException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch (PcapNativeException | NotOpenException e) {
+                    throw new CaptureEngineException(e.getMessage(), e);
                 } catch (InterruptedException e) {
                     //this is when the handle gets stopped
+                    Thread.currentThread().interrupt();
                     //e.printStackTrace();
                 } finally {
                     running = false;
