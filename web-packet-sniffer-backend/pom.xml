@@ -13,11 +13,11 @@
    <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.1</version> <!-- Or any version you prefer -->
+        <version>3.2.5</version> 
     </parent>
-  <dependencies>
 
-    <dependency>
+  <dependencies>
+  <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
@@ -34,29 +34,15 @@
       <artifactId>pcap4j-packetfactory-static</artifactId>
       <version>1.7.3</version>
     </dependency>
-    <dependency>
-      <groupId>org.pcap4j</groupId>
-      <artifactId>pcap4j-packetfactory-static</artifactId>
-      <version>1.7.3</version>
-    </dependency>
-    <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-      <version> 4.0.1 </version>
-		</dependency>
       <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
     </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-      <version> 4.0.1 </version>
+      <version> 3.2.5 </version>
 		</dependency>
   </dependencies>
 

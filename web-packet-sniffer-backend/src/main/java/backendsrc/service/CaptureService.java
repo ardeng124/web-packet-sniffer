@@ -17,9 +17,7 @@ import backendsrc.domain.PacketSummary;
 import backendsrc.engine.CaptureEngine;
 import backendsrc.service.exception.CaptureSessionStateInvalidException;
 import backendsrc.service.exception.CaptureEngineException;
-import backendsrc.service.exception.CaptureSessionStateInvalidException;
 import backendsrc.service.exception.InterfaceNotFoundException;
-import backendsrc.service.exception.NoActiveCaptureException;
 
 public class CaptureService {
     private CaptureSession currentSession;
