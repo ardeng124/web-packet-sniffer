@@ -18,9 +18,7 @@ public class PacketBuffer implements PacketConsumer {
         packetBuffer = new ArrayDeque<>();
     }
     public synchronized List<PacketSummary> getSnapshot(){
-        synchronized(packetBuffer){
-            return new ArrayList<>(packetBuffer); 
-        }
+        return new ArrayList<>(packetBuffer); 
     }
     public synchronized void clear() {
         packetBuffer.clear();
