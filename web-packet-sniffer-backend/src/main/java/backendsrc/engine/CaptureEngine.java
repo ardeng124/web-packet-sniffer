@@ -98,6 +98,7 @@ public class CaptureEngine {
                 try {
                     captureHandle.loop(-1, listener);
                 } catch (PcapNativeException | NotOpenException e) {
+                    running = false;
                     throw new CaptureEngineException(e.getMessage(), e);
                 } catch (InterruptedException e) {
                     //this is when the handle gets stopped
@@ -112,9 +113,13 @@ public class CaptureEngine {
         }
     }
 
-    public void stopCapture() throws NotOpenException {
+    public void stopCapture() throws CaptureEngineException {
         if (running && captureHandle != null) {
-            captureHandle.breakLoop();
+            try {
+                captureHandle.breakLoop();
+            } catch (NotOpenException e) {
+                throw new CaptureEngineException(e.getMessage(), e);
+            }
             captureHandle.close();
             running=false;
         }

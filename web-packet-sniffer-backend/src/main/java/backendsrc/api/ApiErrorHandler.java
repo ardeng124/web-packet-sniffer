@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import backendsrc.service.exception.CaptureEngineException;
 import backendsrc.service.exception.CaptureSessionStateInvalidException;
+import backendsrc.service.exception.CaptureOperationFailedException;
 import backendsrc.service.exception.InterfaceNotFoundException;
 
 @RestControllerAdvice
@@ -23,9 +23,9 @@ public class ApiErrorHandler {
             return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(CaptureEngineException.class)
-    public ResponseEntity<ApiErrorResponse> handleCaptureEngineError(CaptureEngineException ex) {
-            ApiErrorResponse errorResponse = new ApiErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Conflict", ex.getMessage());
+    @ExceptionHandler(CaptureOperationFailedException.class)
+    public ResponseEntity<ApiErrorResponse> handleCaptureEngineError(CaptureOperationFailedException ex) {
+            ApiErrorResponse errorResponse = new ApiErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(),"Capture Error", ex.getMessage());
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     

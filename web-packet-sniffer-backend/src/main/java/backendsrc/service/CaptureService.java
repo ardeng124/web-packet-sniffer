@@ -15,8 +15,9 @@ import backendsrc.domain.CaptureSession;
 import backendsrc.domain.CaptureState;
 import backendsrc.domain.PacketSummary;
 import backendsrc.engine.CaptureEngine;
+import backendsrc.engine.exception.CaptureEngineException;
+import backendsrc.service.exception.CaptureOperationFailedException;
 import backendsrc.service.exception.CaptureSessionStateInvalidException;
-import backendsrc.service.exception.CaptureEngineException;
 import backendsrc.service.exception.InterfaceNotFoundException;
 
 public class CaptureService {
@@ -146,6 +147,22 @@ public class CaptureService {
         }
     }
 
+    public String toUserFriendlyMessage(CaptureEngineException e, String operation) {
+        String cause = e.getMessage();
+        cause = cause.toLowerCase();
+
+        if (cause.contains("permission denied") || cause.contains("don't have permission")) {
+            return "Permission denied: the application does not have enough privileges to capture packets. " + "Try running with the required capabilities or as an administrator.";
+        }
+        if (cause.contains("no such device") || cause.contains("no such interface") || cause.contains("interface missing")) {
+            return "The selected network interface could not be found. " + "Please check the interface name and try again.";
+        }   
+        if (cause.contains("not open")){
+            return "Capture handle is not open. The capture session may have stopped or failed to start.";
+        }
+        return "Unknown capture error. Failed to "+operation+" capture";
+    }
+
     public synchronized void startCapture(String interfaceName) {
         if (currentSession != null
                 && currentSession.state == CaptureState.RUNNING) {
@@ -156,8 +173,9 @@ public class CaptureService {
         currentSession.beginSession();
         try {
             engine.startCapture(iface, currentSession.consumer);
-        } catch (PcapNativeException e) {
-            throw new CaptureEngineException("Failed to start capture", e);
+        } catch (CaptureEngineException e) {
+            String message = toUserFriendlyMessage(e, "start");  
+            throw new CaptureOperationFailedException(message);
         }
     }
 
@@ -169,8 +187,9 @@ public class CaptureService {
         currentSession.stopSession();
         try {
             engine.stopCapture();
-        } catch (NotOpenException e) {
-        throw new CaptureEngineException("Failed to stop capture", e);
+        } catch (CaptureEngineException e) {
+            String message = toUserFriendlyMessage(e, "stop");  
+            throw new CaptureOperationFailedException(message);
         }
     }
 
