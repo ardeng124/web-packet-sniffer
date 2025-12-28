@@ -170,13 +170,13 @@ public class CaptureService {
         }        currentSession = new CaptureSession(defaultBufferSize);
 
         PcapNetworkInterface iface = resolve(interfaceName);
-        currentSession.beginSession();
         try {
             engine.startCapture(iface, currentSession.consumer);
         } catch (CaptureEngineException e) {
             String message = toUserFriendlyMessage(e, "start");  
             throw new CaptureOperationFailedException(message);
         }
+        currentSession.beginSession();
     }
 
     public synchronized void stopCapture() {
@@ -184,13 +184,13 @@ public class CaptureService {
                 || currentSession.state != CaptureState.RUNNING) {
             throw new CaptureSessionStateInvalidException("Capture session not running or not initialised");
         }  
-        currentSession.stopSession();
         try {
             engine.stopCapture();
         } catch (CaptureEngineException e) {
             String message = toUserFriendlyMessage(e, "stop");  
             throw new CaptureOperationFailedException(message);
         }
+        currentSession.stopSession();
     }
 
     public synchronized void clearPackets() {
