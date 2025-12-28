@@ -3,11 +3,6 @@ package backendsrc.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import org.pcap4j.core.PcapNativeException;
-import org.pcap4j.core.PcapNetworkInterface;
-import org.pcap4j.core.Pcaps;
-
 import backendsrc.api.CaptureStatusResponse;
 import backendsrc.domain.CaptureSession;
 import backendsrc.domain.CaptureState;
@@ -17,7 +12,6 @@ import backendsrc.engine.exception.CaptureEngineException;
 import backendsrc.service.exception.CaptureOperationFailedException;
 import backendsrc.service.exception.CaptureSessionStateInvalidException;
 import backendsrc.service.exception.InterfaceEnumerationFailedException;
-import backendsrc.service.exception.InterfaceNotFoundException;
 
 public class CaptureService {
     private CaptureSession currentSession;
@@ -72,29 +66,6 @@ public class CaptureService {
         return interfaceSummary;
     }
 
-    private PcapNetworkInterface resolve (String interfaceName) {
-        PcapNetworkInterface foundInterface = null;
-        try {
-            List<PcapNetworkInterface> allDevs = Pcaps.findAllDevs();
-
-            for (PcapNetworkInterface nif : allDevs) {
-                if (nif.getName().equals(interfaceName)) {
-                    foundInterface = nif;
-                    break;
-                }
-            }
-        } catch (PcapNativeException e) {
-            e.printStackTrace();
-            return null;
-        } 
-
-        if (foundInterface != null) {
-            return foundInterface;
-        } else {
-            throw new InterfaceNotFoundException(interfaceName);
-        }
-    }
-
     public String toUserFriendlyMessage(CaptureEngineException e, String operation) {
         String cause = e.getMessage();
         cause = cause.toLowerCase();
@@ -116,10 +87,8 @@ public class CaptureService {
                 && currentSession.state == CaptureState.RUNNING) {
             throw new CaptureSessionStateInvalidException("Capture session already running");
         }        currentSession = new CaptureSession(defaultBufferSize);
-
-        PcapNetworkInterface iface = resolve(interfaceName);
         try {
-            engine.startCapture(iface, currentSession.consumer);
+            engine.startCapture(interfaceName, currentSession.consumer);
         } catch (CaptureEngineException e) {
             String message = toUserFriendlyMessage(e, "start");  
             throw new CaptureOperationFailedException(message);

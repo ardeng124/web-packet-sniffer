@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import backendsrc.service.exception.CaptureSessionStateInvalidException;
 import backendsrc.service.exception.InterfaceEnumerationFailedException;
+import backendsrc.engine.exception.InterfaceNotFoundException;
 import backendsrc.service.exception.CaptureOperationFailedException;
-import backendsrc.service.exception.InterfaceNotFoundException;
 
 @RestControllerAdvice
 public class ApiErrorHandler {

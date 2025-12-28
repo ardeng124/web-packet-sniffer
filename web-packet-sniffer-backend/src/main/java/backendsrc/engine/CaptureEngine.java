@@ -15,6 +15,7 @@ import org.pcap4j.packet.UdpPacket.UdpHeader;
 import backendsrc.consumer.PacketConsumer;
 import backendsrc.domain.PacketSummary;
 import backendsrc.engine.exception.CaptureEngineException;
+import backendsrc.engine.exception.InterfaceNotFoundException;
 import backendsrc.service.NetworkInterfaceInfo;
 
 import org.pcap4j.packet.*;
@@ -115,7 +116,31 @@ public class CaptureEngine {
         return interfaceSummary;
     }
 
-    public void startCapture(PcapNetworkInterface selectedInterface, PacketConsumer consumer) throws CaptureEngineException {
+    private PcapNetworkInterface resolve (String interfaceName) {
+        PcapNetworkInterface foundInterface = null;
+        try {
+            List<PcapNetworkInterface> allDevs = Pcaps.findAllDevs();
+
+            for (PcapNetworkInterface nif : allDevs) {
+                if (nif.getName().equals(interfaceName)) {
+                    foundInterface = nif;
+                    break;
+                }
+            }
+        } catch (PcapNativeException e) {
+            e.printStackTrace();
+            return null;
+        } 
+
+        if (foundInterface != null) {
+            return foundInterface;
+        } else {
+            throw new InterfaceNotFoundException(interfaceName);
+        }
+    }
+
+    public void startCapture(String selectedInterfaceString, PacketConsumer consumer) throws CaptureEngineException {
+        PcapNetworkInterface selectedInterface = resolve(selectedInterfaceString);
         if (!running) {
             try {
                 captureHandle = selectedInterface.openLive(snapshotLength, PromiscuousMode.PROMISCUOUS, readTimeout);
