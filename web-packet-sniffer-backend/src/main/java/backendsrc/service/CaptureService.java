@@ -60,11 +60,11 @@ public class CaptureService {
         return currentSession.sessionID;
     }
 
-    public CaptureState getSessionState(){
+    public synchronized CaptureState getSessionState(){
         return currentSession.state;
     }
 
-    public CaptureStatusResponse currentStatus() {
+    public synchronized CaptureStatusResponse currentStatus() {
         if (currentSession == null) {
             return new CaptureStatusResponse(null, null, "Session not initialised");
         } else {
@@ -179,7 +179,7 @@ public class CaptureService {
         currentSession.clearPackets();
     }
 
-    public synchronized List<PacketSummary> getPacketSnapshot(){
+    public List<PacketSummary> getPacketSnapshot(){
         if (currentSession == null) return new ArrayList<PacketSummary>();
         return currentSession.getBufferSnapshot();
     }

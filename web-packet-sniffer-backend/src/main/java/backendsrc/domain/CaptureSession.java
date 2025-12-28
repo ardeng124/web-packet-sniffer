@@ -9,7 +9,7 @@ import java.time.Instant;
 public class CaptureSession {
     public UUID sessionID;
     public CaptureState state;
-    public PacketBuffer consumer;
+    public final PacketBuffer consumer;
     public Instant startTime;
     public Instant stopTime;
     public int bufferSize;
@@ -43,7 +43,7 @@ public class CaptureSession {
         return consumer.getSnapshot();
     }
 
-    public boolean isRunning() {
+    public synchronized boolean isRunning() {
         return state == CaptureState.RUNNING;
     }
 

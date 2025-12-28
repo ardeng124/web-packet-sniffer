@@ -8,7 +8,7 @@ import backendsrc.domain.PacketSummary;
 
 public class PacketBuffer implements PacketConsumer {
     private final ArrayDeque<PacketSummary> packetBuffer;
-    int maxBufferSize = 1000;
+    private int maxBufferSize = 1000;
     
     public PacketBuffer(int bufferSize) {
         packetBuffer = new ArrayDeque<>();
@@ -17,21 +17,18 @@ public class PacketBuffer implements PacketConsumer {
     public PacketBuffer() {
         packetBuffer = new ArrayDeque<>();
     }
-    public List<PacketSummary> getSnapshot(){
+    public synchronized List<PacketSummary> getSnapshot(){
         synchronized(packetBuffer){
             return new ArrayList<>(packetBuffer); 
         }
     }
-    public void clear() {
+    public synchronized void clear() {
         packetBuffer.clear();
     }
-    public void consumePacket(PacketSummary inPacket) {
-        synchronized (packetBuffer) {
-
-            while (packetBuffer.size() >= maxBufferSize) {
-                packetBuffer.removeFirst();
-            }
-            packetBuffer.addLast(inPacket);
+    public synchronized void consumePacket(PacketSummary inPacket) {
+        while (packetBuffer.size() >= maxBufferSize) {
+            packetBuffer.removeFirst();
         }
+        packetBuffer.addLast(inPacket);
     }
 }
