@@ -9,6 +9,7 @@ import backendsrc.domain.CaptureState;
 import backendsrc.domain.PacketSummary;
 import backendsrc.engine.CaptureEngine;
 import backendsrc.engine.exception.CaptureEngineException;
+import backendsrc.engine.exception.InterfaceNotFoundException;
 import backendsrc.service.exception.CaptureOperationFailedException;
 import backendsrc.service.exception.CaptureSessionStateInvalidException;
 import backendsrc.service.exception.InterfaceEnumerationFailedException;
@@ -92,6 +93,8 @@ public class CaptureService {
         } catch (CaptureEngineException e) {
             String message = toUserFriendlyMessage(e, "start");  
             throw new CaptureOperationFailedException(message);
+        } catch (InterfaceNotFoundException e) {
+            throw new CaptureOperationFailedException("Capture failed to start: "+e.getMessage());
         }
         currentSession.beginSession();
     }
