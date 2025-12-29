@@ -54,4 +54,18 @@ public class Routes {
         return res;
     }
 
+    @PostMapping(value = "/api/capture/pause")
+    public CaptureStatusResponse pauseCapture() {
+        service.pauseCapture();
+        CaptureStatusResponse res = new CaptureStatusResponse(service.getSessionID(),service.getSessionState(), "Capture paused successfully");
+        return res;
+    }
+
+    @PostMapping(value = "/api/capture/resume")
+    public CaptureStatusResponse resumeCapture() {
+        service.resumeCapture();
+        CaptureStatusResponse res = new CaptureStatusResponse(service.getSessionID(),service.getSessionState(), "Capture resumed successfully");
+        return res;
+    }
+
 }

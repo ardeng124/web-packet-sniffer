@@ -113,6 +113,22 @@ public class CaptureService {
         currentSession.stopSession();
     }
 
+    public synchronized void pauseCapture() {
+        if (currentSession == null
+                || currentSession.state != CaptureState.RUNNING) {
+            throw new CaptureSessionStateInvalidException("Capture session not running or not initialised");
+        }  
+        currentSession.pauseSession();
+    }
+
+    public synchronized void resumeCapture() {
+        if (currentSession == null
+                || currentSession.state != CaptureState.PAUSED) {
+            throw new CaptureSessionStateInvalidException("Capture session state invalid: Already running or not initialised");
+        }  
+        currentSession.resumeSession();
+    }
+
     public synchronized void clearPackets() {
         if (currentSession == null) throw new CaptureSessionStateInvalidException("Capture session not running or not initialised"); 
         currentSession.clearPackets();
