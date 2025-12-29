@@ -28,23 +28,19 @@ public class CaptureSession {
     }
 
     public synchronized void beginSession() {
-        if (state != CaptureState.NEW) throw new IllegalStateException("Session state invalid");
         state = CaptureState.RUNNING;
         startTime = Instant.now();
     }
 
     public synchronized void pauseSession() {
-        if (state != CaptureState.RUNNING) throw new IllegalStateException("Session state invalid");
         state = CaptureState.PAUSED;
     }
 
     public synchronized void resumeSession() {
-        if (state != CaptureState.PAUSED) throw new IllegalStateException("Session state invalid");
         state = CaptureState.RUNNING;
     }
 
     public synchronized void stopSession() {
-        if (state != CaptureState.RUNNING && state != CaptureState.PAUSED) throw new IllegalStateException("Session state invalid");
         state = CaptureState.STOPPED;
         stopTime = Instant.now();
     }
