@@ -1,5 +1,5 @@
 package backendsrc.domain;
 
 public enum CaptureState {
-    NEW, RUNNING, STOPPED
+    NEW, RUNNING, STOPPED, PAUSED
 }
