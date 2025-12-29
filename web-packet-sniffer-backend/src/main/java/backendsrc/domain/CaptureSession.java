@@ -17,13 +17,13 @@ public class CaptureSession {
     public CaptureSession() {
         sessionID = UUID.randomUUID();
         state = CaptureState.NEW;
-        consumer = new PacketBuffer();
+        consumer = new PacketBuffer(this);
     }
 
     public CaptureSession(int maxBufferSize) {
         sessionID = UUID.randomUUID();
         state = CaptureState.NEW;
-        consumer = new PacketBuffer(maxBufferSize);
+        consumer = new PacketBuffer(maxBufferSize, this);
         bufferSize = maxBufferSize;
     }
 
