@@ -16,5 +16,15 @@ export const selectInterface = (e) => {
     state.setSelectedInterface(e.target.value);
 }
 
+export const onStartCaptureClicked = (handler) => {
+    document
+        .getElementById("startBtn")
+        .addEventListener("click", handler);
+}
+
+export function updateStatus(status) {
+    document.getElementById("statusText").textContent = status.state;
+}
+
 
 window.selectInterface = selectInterface;
