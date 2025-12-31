@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
     <script type="module" src="js/main.js"></script>
-    <button> List Interfaces</button>
+    <script src="js/ui.js"></script>
+
     <p id="statusText"></p>
 
     <label for="interfaceList">Choose an interface:</label>
-    <select id="interfaceList">
+    <select id="interfaceList" onchange="selectInterface(event)">
 
     </select>
+    <!-- <button onclick="selectInterface()" for="interfaceList"> Select Interface</button> -->
 </html>

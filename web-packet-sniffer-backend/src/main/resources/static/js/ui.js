@@ -1,3 +1,5 @@
+import * as state from './state.js'
+
 export const renderInterfaceList = (interfaces) => {
     const interfaceList = document.getElementById("interfaceList");
     console.log(interfaces)
@@ -8,3 +10,11 @@ export const renderInterfaceList = (interfaces) => {
         interfaceList.appendChild(int);
     });
 }
+
+export const selectInterface = (e) => {
+    e.preventDefault();
+    state.setSelectedInterface(e.target.value);
+}
+
+
+window.selectInterface = selectInterface;
