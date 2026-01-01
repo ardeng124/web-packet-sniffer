@@ -30,4 +30,17 @@ export const clearStatus = () => {
     document.getElementById("statusText").textContent = ""
 }
 
+export const disableStartEnableStop = () => {
+    let startBtn = document.getElementById("startBtn")
+    let stopBtn = document.getElementById("stopBtn")
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+}
+
+export const enableStartDisableStop = () => {
+    let startBtn = document.getElementById("startBtn")
+    let stopBtn = document.getElementById("stopBtn")
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+}
 window.selectInterface = selectInterface;
