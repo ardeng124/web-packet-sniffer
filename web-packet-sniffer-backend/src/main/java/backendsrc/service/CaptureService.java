@@ -49,6 +49,9 @@ public class CaptureService {
                 case NEW:
                     statusMessage = "starting";
                     break;
+                case PAUSED:
+                    statusMessage = "Paused";
+                    break;
                 default:
                     statusMessage = "unknown";
             }
