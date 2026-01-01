@@ -43,4 +43,27 @@ export const enableStartDisableStop = () => {
     startBtn.disabled = false;
     stopBtn.disabled = true;
 }
+
+export const renderPackets = (packets) => {
+    if (!Array.isArray(packets) || packets.length === 0) return;
+    const tbody = document.querySelector("#packetList tbody");
+    tbody.innerHTML = "";
+    const fragment = document.createDocumentFragment();
+        packets.forEach((packet) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${new Date(packet.timestamp).toLocaleTimeString()}</td>
+                <td>${packet.protocol}</td>
+                <td>${packet.sourceAddress}</td>
+                <td>${packet.port}</td>
+                <td>${packet.destinationAddress}</td>
+                <td>${packet.destPort}</td>
+                <td>${packet.packetLength}</td>
+            `;
+            fragment.appendChild(row);
+        })
+        tbody.appendChild(fragment);            
+}
+
+
 window.selectInterface = selectInterface;

@@ -35,5 +35,6 @@ export const startPollingPackets = async () => {
     setInterval(async () => {
         if (!state.isRunning()) return;
         const packets = await api.getPackets();
+        ui.renderPackets(packets);
     }, 1200);
 }
