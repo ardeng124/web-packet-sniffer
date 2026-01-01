@@ -17,3 +17,7 @@ export const setSession = (newSession) => {
 export const getSession = () => {
     return session;
 }
+
+export const isRunning = () => {
+    return session.state == 'RUNNING'
+}

@@ -22,9 +22,12 @@ export const onStartCaptureClicked = (handler) => {
         .addEventListener("click", handler);
 }
 
-export function updateStatus(status) {
-    document.getElementById("statusText").textContent = status.state;
+export const updateStatus = (status) => {
+    document.getElementById("statusText").textContent = status;
 }
 
+export const clearStatus = () => {
+    document.getElementById("statusText").textContent = ""
+}
 
 window.selectInterface = selectInterface;

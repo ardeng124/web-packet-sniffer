@@ -11,23 +11,22 @@ const initApp = async () => {
     ui.onStartCaptureClicked(handleStartCapture);
 }
 
-async function handleStartCapture() {
+const handleStartCapture = async () => {
+    ui.clearStatus();
     console.log("click")
     const iface = state.getSelectedInterface();
     console.log(iface)
     if (!iface) {
-        //TODO: make a ui.js function to show an error message to user;
+        ui.updateStatus("Please select an interface")
         return;
     }
 
     try {
         const status = await api.startCapture(iface);
         state.setSession(status);
-        startPollingPackets();
+        //TODO: startPollingPackets();
     } catch (err) {
-        //TODO: make a ui.js function to show an error message to user;
-
+        ui.updateStatus(`${err}`)
     }
 }
-
 

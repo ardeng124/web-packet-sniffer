@@ -17,10 +17,16 @@ export async function startCapture(interfaceName) {
             headers: { "Content-Type": "text/plain" },
             body: interfaceName
         });
+        const data = await res.json();
+        if (!res.ok) {
+            const error = new Error(data.message || "Failed to start capture");
+            error.status = res.status;
+            throw error;
+        }
+
+        return data;
     } catch (error) {
         console.error("Unable to start capture",error);
-        return;
+        throw error;
     }
-
-    return await res.json();
 }
