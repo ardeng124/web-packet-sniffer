@@ -61,3 +61,22 @@ export const stopCapture = async() => {
         throw error;
     }
 }
+
+export const pauseCapture = async() => {
+    try {
+        const res = await fetch(`${API_URL}/api/capture/pause`, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            const error = new Error(data.message || "Failed to pause capture");
+            error.status = res.status;
+            throw error;
+        }
+        return data;
+    } catch (error) {
+        console.error("Unable to pause capture",error);
+        throw error;
+    }
+}

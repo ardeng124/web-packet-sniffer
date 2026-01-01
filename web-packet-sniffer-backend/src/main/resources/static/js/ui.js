@@ -28,6 +28,12 @@ export const onStopCaptureClicked = (handler) => {
         .addEventListener("click", handler);
 }
 
+export const onPauseCaptureClicked = (handler) => {
+    document
+        .getElementById("pauseBtn")
+        .addEventListener("click", handler);
+}
+
 export const updateStatus = (status) => {
     document.getElementById("statusText").textContent = status;
 }
@@ -48,6 +54,20 @@ export const enableStartDisableStop = () => {
     let stopBtn = document.getElementById("stopBtn")
     startBtn.disabled = false;
     stopBtn.disabled = true;
+}
+
+export const enablePauseDisableResume = () => {
+    let pauseBtn = document.getElementById("pauseBtn")
+    let resumeBtn = document.getElementById("resumeBtn")
+    pauseBtn.disabled = false;
+    resumeBtn.disabled = true;
+}
+
+export const disablePauseEnableResume = () => {
+    let pauseBtn = document.getElementById("pauseBtn")
+    let resumeBtn = document.getElementById("resumeBtn")
+    pauseBtn.disabled = true;
+    resumeBtn.disabled = false;
 }
 
 export const renderPackets = (packets) => {

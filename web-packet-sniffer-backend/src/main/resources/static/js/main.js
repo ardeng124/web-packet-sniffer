@@ -10,6 +10,7 @@ const initApp = async () => {
     ui.renderInterfaceList(interfaces);
     ui.onStartCaptureClicked(handleStartCapture);
     ui.onStopCaptureClicked(handleStopCapture);
+    ui.onPauseCaptureClicked(handlePauseCapture);
 
 }
 
@@ -24,6 +25,7 @@ const handleStartCapture = async () => {
         const status = await api.startCapture(iface);
         state.setSession(status);
         ui.disableStartEnableStop();
+        ui.enablePauseDisableResume();
         startPollingPackets();
     } catch (err) {
         ui.updateStatus(`${err}`)
@@ -44,6 +46,17 @@ const handleStopCapture = async () => {
         const status = await api.stopCapture();
         state.setSession(status);
         ui.enableStartDisableStop();
+    } catch (err) {
+        ui.updateStatus(`${err}`)
+    }
+}
+
+const handlePauseCapture = async () => {
+    ui.clearStatus();
+    try {
+        const status = await api.pauseCapture();
+        state.setSession(status);
+        ui.disablePauseEnableResume();
     } catch (err) {
         ui.updateStatus(`${err}`)
     }
