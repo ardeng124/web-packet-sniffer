@@ -34,6 +34,12 @@ export const onPauseCaptureClicked = (handler) => {
         .addEventListener("click", handler);
 }
 
+export const onResumeCaptureClicked = (handler) => {
+    document
+        .getElementById("resumeBtn")
+        .addEventListener("click", handler);
+}
+
 export const updateStatus = (status) => {
     document.getElementById("statusText").textContent = status;
 }

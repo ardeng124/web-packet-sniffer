@@ -80,3 +80,22 @@ export const pauseCapture = async() => {
         throw error;
     }
 }
+
+export const resumeCapture = async() => {
+    try {
+        const res = await fetch(`${API_URL}/api/capture/resume`, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            const error = new Error(data.message || "Failed to resume capture");
+            error.status = res.status;
+            throw error;
+        }
+        return data;
+    } catch (error) {
+        console.error("Unable to resume capture",error);
+        throw error;
+    }
+}

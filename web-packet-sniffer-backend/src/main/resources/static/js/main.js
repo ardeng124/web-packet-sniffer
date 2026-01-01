@@ -11,7 +11,7 @@ const initApp = async () => {
     ui.onStartCaptureClicked(handleStartCapture);
     ui.onStopCaptureClicked(handleStopCapture);
     ui.onPauseCaptureClicked(handlePauseCapture);
-
+    ui.onResumeCaptureClicked(handleResumeCapture);
 }
 
 const handleStartCapture = async () => {
@@ -57,6 +57,17 @@ const handlePauseCapture = async () => {
         const status = await api.pauseCapture();
         state.setSession(status);
         ui.disablePauseEnableResume();
+    } catch (err) {
+        ui.updateStatus(`${err}`)
+    }
+}
+
+const handleResumeCapture = async () => {
+    ui.clearStatus();
+    try {
+        const status = await api.resumeCapture();
+        state.setSession(status);
+        ui.enablePauseDisableResume();
     } catch (err) {
         ui.updateStatus(`${err}`)
     }
