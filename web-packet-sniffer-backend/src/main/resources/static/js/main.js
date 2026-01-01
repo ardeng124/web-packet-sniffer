@@ -9,18 +9,17 @@ const initApp = async () => {
     let interfaces = await api.getAvailableInterfaces();
     ui.renderInterfaceList(interfaces);
     ui.onStartCaptureClicked(handleStartCapture);
+    ui.onStopCaptureClicked(handleStopCapture);
+
 }
 
 const handleStartCapture = async () => {
     ui.clearStatus();
-    console.log("click")
     const iface = state.getSelectedInterface();
-    console.log(iface)
     if (!iface) {
         ui.updateStatus("Please select an interface")
         return;
     }
-
     try {
         const status = await api.startCapture(iface);
         state.setSession(status);
@@ -37,4 +36,15 @@ export const startPollingPackets = async () => {
         const packets = await api.getPackets();
         ui.renderPackets(packets);
     }, 1200);
+}
+
+const handleStopCapture = async () => {
+    ui.clearStatus();
+    try {
+        const status = await api.stopCapture();
+        state.setSession(status);
+        ui.enableStartDisableStop();
+    } catch (err) {
+        ui.updateStatus(`${err}`)
+    }
 }

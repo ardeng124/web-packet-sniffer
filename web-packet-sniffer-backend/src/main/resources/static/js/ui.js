@@ -22,6 +22,12 @@ export const onStartCaptureClicked = (handler) => {
         .addEventListener("click", handler);
 }
 
+export const onStopCaptureClicked = (handler) => {
+    document
+        .getElementById("stopBtn")
+        .addEventListener("click", handler);
+}
+
 export const updateStatus = (status) => {
     document.getElementById("statusText").textContent = status;
 }
