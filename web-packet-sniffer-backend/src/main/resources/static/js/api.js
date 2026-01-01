@@ -30,3 +30,14 @@ export async function startCapture(interfaceName) {
         throw error;
     }
 }
+
+export const getPackets = async () => {
+    try {
+        const response = await fetch(`${API_URL}/api/packets`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching packets:', error);
+        return [];
+    }
+}

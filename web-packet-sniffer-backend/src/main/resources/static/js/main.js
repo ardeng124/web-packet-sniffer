@@ -25,10 +25,15 @@ const handleStartCapture = async () => {
         const status = await api.startCapture(iface);
         state.setSession(status);
         ui.disableStartEnableStop();
-        //TODO: startPollingPackets();
+        startPollingPackets();
     } catch (err) {
         ui.updateStatus(`${err}`)
     }
 }
 
-
+export const startPollingPackets = async () => {
+    setInterval(async () => {
+        if (!state.isRunning()) return;
+        const packets = await api.getPackets();
+    }, 1200);
+}
