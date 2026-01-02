@@ -9,6 +9,7 @@ export const renderInterfaceList = (interfaces) => {
         int.textContent = element.name;
         interfaceList.appendChild(int);
     });
+    interfaceList.value =""
 }
 
 export const selectInterface = (e) => {

@@ -7,34 +7,37 @@
         <link rel="stylesheet" href="css/skeleton.css">
         <link rel="stylesheet" href="css/styles.css">
         <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
     </head>
-    <p id="statusText"></p>
+    <body>
+        <div id="controlBtns">
+            <p id="statusText"></p>
 
-    <label for="interfaceList">Choose an interface:</label>
-    <select id="interfaceList" onchange="selectInterface(event)">
-
-    </select>
-    <button id="startBtn">Start Capture </button>
-    <button disabled="true" id="stopBtn">Stop Capture </button>
-    <button disabled="true" id="pauseBtn">Pause Capture </button>
-    <button disabled="true" id="resumeBtn">Resume Capture </button>
-
-    <!-- <button onclick="selectInterface()" for="interfaceList"> Select Interface</button> -->
-
-<table id="packetList" title="Packet List">
-    <thead>
-    <tr>
-        <th>Timestamp</th>
-        <th>Protocol</th>
-        <th>Source</th>
-        <th>Source Port</th>
-        <th>Dest</th>
-        <th>Dest Port</th>
-        <th>Packet Length</th>
-    </tr></thead>
-    <tbody>
-
-    </tbody>
-</table>
-</html>
+            <select id="interfaceList" onchange="selectInterface(event)">
+                <option value="" selected disabled hidden>Choose an interface</option>
+            </select>
+            
+            <button id="startBtn">Start Capture </button>
+            <button disabled="true" id="stopBtn">Stop Capture </button>
+            <button disabled="true" id="pauseBtn">Pause Capture </button>
+            <button disabled="true" id="resumeBtn">Resume Capture </button>
+        </div>
+        <!-- <button onclick="selectInterface()" for="interfaceList"> Select Interface</button> -->
+        <div id="tableContainer">
+            <table id="packetList" title="Packet List">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Protocol</th>
+                        <th>Source</th>
+                        <th>Source Port</th>
+                        <th>Dest</th>
+                        <th>Dest Port</th>
+                        <th>Packet Length</th>
+                    </tr></thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+            </body>
+            </html>

@@ -1,0 +1,30 @@
+button:disabled {
+    opacity: 75%;
+}
+
+body {
+    padding: 15px;
+    margin:auto;
+    width:75%;
+    text-align: center;
+}
+
+#packetList{
+    width:100%;
+    margin:auto;
+}
+
+tbody tr:hover {
+  background-color: rgba(14, 116, 144, 0.1);
+}
+
+thead {
+    position: sticky;
+    top:0;
+    background-color: white;
+    z-index: 2;
+}
+#tableContainer {
+    height: calc(100vh - 120px); 
+    overflow-y: auto;
+}
